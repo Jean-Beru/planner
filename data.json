@@ -1,0 +1,25 @@
+{
+  "days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+  "shifts": [
+    "8-10", "8-10", "8-10", "8-10 (clic)", "8-10 (clic)",
+    "10-12", "10-12", "10-12", "10-12 (clic)", "10-12 (clic)",
+    "13-15", "13-15", "13-15", "13-15 (clic)", "13-15 (clic)",
+    "15-17", "15-17", "15-17", "15-17 (clic)", "15-17 (clic)",
+    "17-19", "17-19", "17-19", "17-19 (clic)", "17-19 (clic)"
+  ],
+  "users": [
+    "User 1", "User 2", "User 3", "User 4", "User 5",
+    "User 6", "User 7", "User 8", "User 9", "User 10",
+    "User 11", "User 12", "User 13", "User 14", "User 15",
+    "User 16", "User 17", "User 18", "User 19", "User 20",
+    "User 21", "User 22", "User 23", "User 24", "User 25",
+    "User 26", "User 27", "User 28", "User 29", "User 30"
+  ],
+  "blocks": [
+    [15, 0, 0],
+    [29, 0, 0]
+  ],
+  "wishes": [
+    [16, 0, 0]
+  ]
+}
