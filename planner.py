@@ -1,6 +1,8 @@
 from __future__ import print_function
 from ortools.sat.python import cp_model
+import sys
 import json
+import math
 
 class Data:
     def __init__(self, filename):
@@ -17,8 +19,14 @@ class Data:
         return range(len(self.shifts))
 
 def main():
+    # Parse arguments
+    if len(sys.argv) != 2:
+        print('usage: %s data.json' % sys.argv[0])
+        exit(1)
+    file = sys.argv[1]
+
     # Populate data
-    data = Data('./data.json')
+    data = Data(file)
     users_range = data.GetUsersRange()
     days_range = data.GetDaysRange()
     shifts_range = data.GetShiftsRange()
@@ -52,7 +60,7 @@ def main():
                 if data.wishes[u][d][s] == 0:
                     model.Add(shifts[(u, d, s)] == 0)
                     users_constraint_count = users_constraint_count + 1
-        users_presence_ratio[u] = 100 - ((users_constraint_count * 100 ) // (len(days_range) * len(shifts_range)))
+        users_presence_ratio[u] = (100 - ((users_constraint_count * 100 ) // (len(days_range) * len(shifts_range)))) * .01
     model.Maximize(sum(data.wishes[u][d][s] * shifts[(u, d, s)] for u in users_range for d in days_range for s in shifts_range))
 
     # min_shifts_per_user is the largest integer such that every user can be assigned at least that many shifts.
@@ -62,9 +70,9 @@ def main():
     min_shifts_per_user = (len(shifts_range) * len(days_range)) // len(users_range)
     max_shifts_per_user = min_shifts_per_user + 1
     for u in users_range:
-        num_shifts_worked = sum(shifts[(u, d, s)] for d in days_range for s in shifts_range) * 100
-        model.Add(min_shifts_per_user * users_presence_ratio[u] <= num_shifts_worked)
-        model.Add(num_shifts_worked <= max_shifts_per_user * users_presence_ratio[u])
+        num_shifts_worked = sum(shifts[(u, d, s)] for d in days_range for s in shifts_range)
+        model.Add(math.floor(min_shifts_per_user * users_presence_ratio[u]) <= num_shifts_worked)
+        model.Add(num_shifts_worked <= math.ceil(max_shifts_per_user * users_presence_ratio[u]))
 
     # Creates the solver and solve.
     solver = cp_model.CpSolver()
